@@ -1,7 +1,7 @@
 Summary:	A cross-platform C and C++ unit testing framework for the 21th century
 Name:		criterion
 Version:	2.3.3
-Release:	1
+Release:	2
 License:	LGPL v2.1+
 Group:		Libraries
 Source0:	https://github.com/Snaipe/Criterion/releases/download/v%{version}/%{name}-v%{version}.tar.bz2
@@ -41,8 +41,10 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT%{_libdir}
-mv $RPM_BUILD_ROOT{%{_prefix}/lib/*,%{_libdir}}
+%if "%{_lib}" != "lib"
+	install -d $RPM_BUILD_ROOT%{_libdir}
+	mv $RPM_BUILD_ROOT{%{_prefix}/lib/*,%{_libdir}}
+%endif
 
 %find_lang Criterion
 
