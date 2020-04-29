@@ -1,0 +1,35 @@
+--- criterion-v2.3.3/src/criterion.pc.in.orig	2018-11-05 01:59:28.000000000 +0100
++++ criterion-v2.3.3/src/criterion.pc.in	2020-04-29 21:13:27.924872823 +0200
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+ includedir=${prefix}/include
+-libdir=${prefix}/lib
++libdir=${prefix}/lib@LIB_SUFFIX@
+ 
+ Name: @PROJECT_NAME@
+ Description: A KISS, Cross platform unit testing framework for C and C++
+--- criterion-v2.3.3/src/CMakeLists.txt.orig	2018-11-05 01:59:28.000000000 +0100
++++ criterion-v2.3.3/src/CMakeLists.txt	2020-04-29 21:14:27.667882501 +0200
+@@ -141,7 +141,7 @@
+   @ONLY
+ )
+ 
+-install (FILES "${CMAKE_CURRENT_BINARY_DIR}/criterion.pc" DESTINATION "share/pkgconfig")
++install (FILES "${CMAKE_CURRENT_BINARY_DIR}/criterion.pc" DESTINATION "lib${LIB_SUFFIX}/pkgconfig")
+ 
+ set (SOURCE_FILES ${SOURCE_FILES} PARENT_SCOPE)
+ set (INTERFACE_FILES ${INTERFACE_FILES} PARENT_SCOPE)
+--- criterion-v2.3.3/.cmake/Modules/PackageUtils.cmake.orig	2018-11-05 01:59:28.000000000 +0100
++++ criterion-v2.3.3/.cmake/Modules/PackageUtils.cmake	2020-04-29 21:16:30.190552072 +0200
+@@ -51,8 +51,8 @@
+ 
+   install(TARGETS ${_LIB}
+     RUNTIME DESTINATION bin
+-    LIBRARY DESTINATION lib
+-    ARCHIVE DESTINATION lib ${install_flags}
++    LIBRARY DESTINATION lib${LIB_SUFFIX}
++    ARCHIVE DESTINATION lib${LIB_SUFFIX} ${install_flags}
+   )
+ endfunction ()
+ 
