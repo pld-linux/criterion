@@ -5,7 +5,7 @@ Summary:	A cross-platform C and C++ unit testing framework for the 21th century
 Summary(pl.UTF-8):	Wieloplatformowy szkielet do testów jednostkowych dla C i C++ w XXI wieku
 Name:		criterion
 Version:	2.3.3
-Release:	3
+Release:	4
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/Snaipe/Criterion/releases
