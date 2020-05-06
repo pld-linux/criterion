@@ -1,17 +1,23 @@
 # TODO:
 # - system boxfort (when released): https://github.com/diacritic/BoxFort
 # - system libcsptr (when some post-2017 release made): https://github.com/Snaipe/libcsptr
+#
+# Conditional build:
+%bcond_without	tests		# build without tests
+#
 Summary:	A cross-platform C and C++ unit testing framework for the 21th century
 Summary(pl.UTF-8):	Wieloplatformowy szkielet do testów jednostkowych dla C i C++ w XXI wieku
 Name:		criterion
 Version:	2.3.3
-Release:	4
+Release:	5
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/Snaipe/Criterion/releases
 Source0:	https://github.com/Snaipe/Criterion/releases/download/v%{version}/%{name}-v%{version}.tar.bz2
 # Source0-md5:	0305dbb5e00f04fd65b22e9ad82ba952
 Patch0:		%{name}-libdir.patch
+Patch1:		x32.patch
+Patch2:		no-cram.patch
 URL:		https://github.com/Snaipe/Criterion
 BuildRequires:	cmake >= 2.8.0
 BuildRequires:	dyncall >= 1.0
@@ -42,12 +48,18 @@ Pliki nagłówkowe biblioteki criterion.
 %prep
 %setup -q -n %{name}-v%{version}
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
 install -d build
 cd build
-%cmake ..
+%cmake .. \
+	%{cmake_on_off tests CTESTS}
+
 %{__make}
+
+%{?with_tests:%{__make} criterion_tests test}
 
 %install
 rm -rf $RPM_BUILD_ROOT
