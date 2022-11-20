@@ -28,8 +28,6 @@ BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define filterout_c -mbranch-protection=standard
-
 %description
 A dead-simple, yet extensible, C and C++ unit testing framework.
 
@@ -73,7 +71,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
-
 
 %files -f criterion.lang
 %defattr(644,root,root,755)
