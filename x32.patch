@@ -1,18 +1,17 @@
---- criterion-v2.3.3/dependencies/boxfort/CMakeLists.txt~	2018-11-05 02:19:59.000000000 +0100
-+++ criterion-v2.3.3/dependencies/boxfort/CMakeLists.txt	2020-05-06 09:01:11.433286507 +0200
-@@ -70,9 +70,15 @@
-         else ()
-             set (BXF_ABI "systemv")
-         endif ()
-+	if (CMAKE_C_COMPILER_ABI MATCHES "ELF X32")
-+        set (BXF_ARCH "x86_64")
-+        set (BXF_BITS 32)
-+        set (BXF_ARCH_x86_64 1)
-+	else ()
-         set (BXF_ARCH "x86_64")
-         set (BXF_BITS 64)
-         set (BXF_ARCH_x86_64 1)
-+	endif ()
-     elseif (_ARCH MATCHES "${ARM32}")
-         set (BXF_ARCH "arm")
-         set (BXF_ABI "arm")
+--- criterion-2.4.1/subprojects/boxfort/meson.build.orig	2022-04-26 08:55:02.322888100 +0200
++++ criterion-2.4.1/subprojects/boxfort/meson.build	2022-11-20 00:30:33.386292493 +0100
+@@ -81,7 +81,13 @@
+ if arch == 'x86'
+ 	bitness = 32
+ elif arch == 'x86_64'
+-	bitness = 64
++	if cc.compiles('''#ifdef __ILP32__
++#error x32
++#endif''')
++		bitness = 64
++        else
++		bitness = 32
++        endif
+ elif arch == 'arm'
+ 	bitness = 32
+ elif arch == 'aarch64'

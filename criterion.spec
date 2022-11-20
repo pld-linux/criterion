@@ -8,22 +8,27 @@
 Summary:	A cross-platform C and C++ unit testing framework for the 21th century
 Summary(pl.UTF-8):	Wieloplatformowy szkielet do testów jednostkowych dla C i C++ w XXI wieku
 Name:		criterion
-Version:	2.3.3
-Release:	5
+Version:	2.4.1
+Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/Snaipe/Criterion/releases
-Source0:	https://github.com/Snaipe/Criterion/releases/download/v%{version}/%{name}-v%{version}.tar.bz2
-# Source0-md5:	0305dbb5e00f04fd65b22e9ad82ba952
-Patch0:		%{name}-libdir.patch
-Patch1:		x32.patch
-Patch2:		no-cram.patch
+Source0:	https://github.com/Snaipe/Criterion/releases/download/v%{version}/%{name}-%{version}.tar.xz
+# Source0-md5:	93e91812837a68524d76339409ed2008
+Patch0:		x32.patch
 URL:		https://github.com/Snaipe/Criterion
-BuildRequires:	cmake >= 2.8.0
 BuildRequires:	dyncall >= 1.0
+BuildRequires:	libffi-devel
+BuildRequires:	libgit2-devel
+BuildRequires:	meson >= 0.51.0
 BuildRequires:	nanomsg-devel >= 1.0.0
-BuildRequires:	rpmbuild(macros) >= 1.605
+BuildRequires:	ninja
+BuildRequires:	rpmbuild(macros) >= 1.736
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define filterout_c -mbranch-protection=standard
 
 %description
 A dead-simple, yet extensible, C and C++ unit testing framework.
@@ -46,28 +51,22 @@ Header files for criterion library.
 Pliki nagłówkowe biblioteki criterion.
 
 %prep
-%setup -q -n %{name}-v%{version}
+%setup -q
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 %build
-install -d build
-cd build
-%cmake .. \
-	%{cmake_on_off tests CTESTS}
+%meson build \
+	-Dtests=%{__true_false tests}
 
-%{__make}
-
-%{?with_tests:%{__make} criterion_tests test}
+%ninja_build -C build
+%{?with_tests:%ninja_test -C build}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} -C build install \
-	DESTDIR=$RPM_BUILD_ROOT
+%ninja_install -C build
 
-%find_lang Criterion
+%find_lang criterion
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -76,7 +75,7 @@ rm -rf $RPM_BUILD_ROOT
 %postun	-p /sbin/ldconfig
 
 
-%files -f Criterion.lang
+%files -f criterion.lang
 %defattr(644,root,root,755)
 %doc ChangeLog doc/*.txt
 %attr(755,root,root) %{_libdir}/libcriterion.so.*.*.*
