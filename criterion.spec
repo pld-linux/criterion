@@ -76,7 +76,6 @@ Statyczne biblioteki criterion.
 
 %build
 %meson build \
-	--default-library=shared \
 	-Dtests=%{__true_false tests}
 
 %ninja_build -C build
