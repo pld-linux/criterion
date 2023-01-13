@@ -1,9 +1,11 @@
 # TODO:
 # - system boxfort (when released): https://github.com/diacritic/BoxFort
+# - system nanopb (0.4.5 bundled)
 # - system libcsptr (when some post-2017 release made): https://github.com/Snaipe/libcsptr
 #
 # Conditional build:
 %bcond_without	tests		# build without tests
+%bcond_with	system_nanopb	# system nanopb (tests fail with nanopb 0.4.7)
 #
 Summary:	A cross-platform C and C++ unit testing framework for the 21th century
 Summary(pl.UTF-8):	Wieloplatformowy szkielet do testów jednostkowych dla C i C++ w XXI wieku
@@ -16,14 +18,17 @@ Group:		Libraries
 Source0:	https://github.com/Snaipe/Criterion/releases/download/v%{version}/%{name}-%{version}.tar.xz
 # Source0-md5:	93e91812837a68524d76339409ed2008
 Patch0:		x32.patch
+Patch1:		%{name}-shared-nanopb.patch
 URL:		https://github.com/Snaipe/Criterion
 BuildRequires:	dyncall >= 1.0
 BuildRequires:	libffi-devel
 BuildRequires:	libgit2-devel
 BuildRequires:	meson >= 0.51.0
 BuildRequires:	nanomsg-devel >= 1.0.0
+%{?with_system_nanopb:BuildRequires:	nanopb-devel >= 0.4.5}
 BuildRequires:	ninja
 BuildRequires:	rpmbuild(macros) >= 1.736
+BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -48,15 +53,34 @@ Header files for criterion library.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki criterion.
 
+%package static
+Summary:	Static criterion libraries
+Summary(pl.UTF-8):	Statyczne biblioteki criterion
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description static
+Static criterion libraries.
+
+%description static -l pl.UTF-8
+Statyczne biblioteki criterion.
+
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
+
+%if %{without system_nanopb}
+%{__sed} -i -e '/dependency.*nanopb/ s/nanopb::protobuf-nanopb/notfound::protobuf-nanopb/' meson.build
+%endif
 
 %build
 %meson build \
+	--default-library=shared \
 	-Dtests=%{__true_false tests}
 
 %ninja_build -C build
+
 %{?with_tests:%ninja_test -C build}
 
 %install
@@ -83,3 +107,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libcriterion.so
 %{_includedir}/criterion
 %{_pkgconfigdir}/criterion.pc
+
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libcriterion.a
+%if %{without system_nanopb}
+%{_libdir}/libprotobuf_nanopb_static.a
+%endif

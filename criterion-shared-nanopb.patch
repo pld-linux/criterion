@@ -1,0 +1,11 @@
+--- criterion-2.4.1/meson.build.orig	2022-04-26 08:55:00.518896600 +0200
++++ criterion-2.4.1/meson.build	2022-11-21 20:40:59.950706878 +0100
+@@ -174,7 +174,7 @@ else
+ 	config.set('NN_REQREP_H', '<nanomsg/reqrep.h>')
+ endif
+ 
+-nanopb = dependency('nanopb', required: false, method: 'cmake', modules: ['nanopb::protobuf-nanopb-static'])
++nanopb = dependency('nanopb', required: false, method: 'cmake', modules: ['nanopb::protobuf-nanopb'])
+ must_regenerate_pb = nanopb.found()
+ if not nanopb.found()
+ 	nanopb_proj = cmake.subproject('nanopb',
