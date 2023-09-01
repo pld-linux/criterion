@@ -27,6 +27,7 @@ BuildRequires:	meson >= 0.55.0
 BuildRequires:	nanomsg-devel >= 1.0.0
 %{?with_system_nanopb:BuildRequires:	nanopb-devel >= 0.4.7}
 BuildRequires:	ninja
+BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
