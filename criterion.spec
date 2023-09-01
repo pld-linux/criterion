@@ -20,6 +20,7 @@ Source0:	https://github.com/Snaipe/Criterion/releases/download/v%{version}/%{nam
 Patch0:		x32.patch
 Patch1:		%{name}-shared-nanopb.patch
 URL:		https://github.com/Snaipe/Criterion
+%{?with_system_nanopb:BuildRequires:	cmake}
 BuildRequires:	dyncall >= 1.0
 BuildRequires:	libffi-devel
 BuildRequires:	libgit2-devel
