@@ -1,31 +1,31 @@
 # TODO:
 # - system boxfort (when released): https://github.com/diacritic/BoxFort
-# - system nanopb (0.4.5 bundled)
+# - system nanopb (0.4.7 bundled)
 # - system libcsptr (when some post-2017 release made): https://github.com/Snaipe/libcsptr
 #
 # Conditional build:
-%bcond_without	tests		# build without tests
-%bcond_with	system_nanopb	# system nanopb (tests fail with nanopb 0.4.7)
+%bcond_without	tests		# testing
+%bcond_without	system_nanopb	# system nanopb
 #
 Summary:	A cross-platform C and C++ unit testing framework for the 21th century
 Summary(pl.UTF-8):	Wieloplatformowy szkielet do testów jednostkowych dla C i C++ w XXI wieku
 Name:		criterion
-Version:	2.4.1
-Release:	5
+Version:	2.4.2
+Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 #Source0Download: https://github.com/Snaipe/Criterion/releases
 Source0:	https://github.com/Snaipe/Criterion/releases/download/v%{version}/%{name}-%{version}.tar.xz
-# Source0-md5:	93e91812837a68524d76339409ed2008
+# Source0-md5:	20affc64bb0d00953826eba4c93bf8ab
 Patch0:		x32.patch
 Patch1:		%{name}-shared-nanopb.patch
 URL:		https://github.com/Snaipe/Criterion
 BuildRequires:	dyncall >= 1.0
 BuildRequires:	libffi-devel
 BuildRequires:	libgit2-devel
-BuildRequires:	meson >= 0.51.0
+BuildRequires:	meson >= 0.55.0
 BuildRequires:	nanomsg-devel >= 1.0.0
-%{?with_system_nanopb:BuildRequires:	nanopb-devel >= 0.4.5}
+%{?with_system_nanopb:BuildRequires:	nanopb-devel >= 0.4.7}
 BuildRequires:	ninja
 BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	sed >= 4.0
