@@ -22,6 +22,7 @@ Patch1:		%{name}-shared-nanopb.patch
 URL:		https://github.com/Snaipe/Criterion
 %{?with_system_nanopb:BuildRequires:	cmake}
 BuildRequires:	dyncall >= 1.0
+BuildRequires:	gettext-tools
 BuildRequires:	libffi-devel
 BuildRequires:	libgit2-devel
 BuildRequires:	meson >= 0.55.0
