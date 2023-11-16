@@ -29,6 +29,7 @@ BuildRequires:	nanomsg-devel >= 1.0.0
 %{?with_system_nanopb:BuildRequires:	nanopb-devel >= 0.4.7}
 BuildRequires:	ninja
 BuildRequires:	pkgconfig
+BuildRequires:	protobuf
 BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
