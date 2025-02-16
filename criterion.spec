@@ -71,8 +71,8 @@ Statyczne biblioteki criterion.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
+%patch -P0 -p1
+%patch -P1 -p1
 
 %if %{without system_nanopb}
 %{__sed} -i -e '/dependency.*nanopb/ s/nanopb::protobuf-nanopb/notfound::protobuf-nanopb/' meson.build
