@@ -31,7 +31,7 @@ BuildRequires:	nanomsg-devel >= 1.0.0
 BuildRequires:	ninja
 BuildRequires:	pkgconfig
 BuildRequires:	protobuf
-BuildRequires:	rpmbuild(macros) >= 1.736
+BuildRequires:	rpmbuild(macros) >= 2.042
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
@@ -79,17 +79,17 @@ Statyczne biblioteki criterion.
 %endif
 
 %build
-%meson build \
+%meson \
 	-Dtests=%{__true_false tests}
 
-%ninja_build -C build
+%meson_build
 
 %{?with_tests:%ninja_test -C build}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%ninja_install -C build
+%meson_install
 
 %find_lang criterion
 
